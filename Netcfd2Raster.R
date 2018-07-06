@@ -1,5 +1,6 @@
 #*************************************************************
 # Export NetCDF file to TIFF: Single or Multiple File
+# This code was originally sourced from https://www.researchgate.net/post/How_to_convert_a_NetCDF4_file_to_GeoTIFF_using_R2 
 #*************************************************************
 rm(list=ls())
 library(ncdf4)
@@ -17,7 +18,7 @@ days
 
 #
 #Working directory
-PATH="D:\\PhD\\Publication\\data\\nc\\"
+PATH="D:\\Publication\\data\\nc\\"
 setwd(PATH)
 INTO="SM_global_1981-2017.nc"
 #INTO="SM_NCEP_JAN-MAY_1981-2018.nc"
@@ -42,14 +43,7 @@ extent(r) <- extent(0, 360, -90, 90)
 rr <- rotate(r)
 print(rr)
 names(rr)
-#*************************************************************
-#Save all layers in a single TIFF file
-#*************************************************************
-######writeRaster(rr, filename="tair.tif", format="GTiff",overwrite=TRUE)
-#*************************************************************
-
 #Save each layer in a multiple TIFF file
-#*************************************************************
 gsub("[.]", "-", substr(names(r), 2, 8))
 #Numbers of layers
 NL<-nlayers(r)
@@ -57,10 +51,10 @@ NL
 #Cicle for save each TIFF file
 for(i in 1:NL){
   plot(rr[[i]])
-  #filout=paste0("SM_Global_",gsub("[.]", "-", substr(names(r), 2, 8))[i],".tif")
-  #writeRaster(rr[[i]], filename=filout, format="GTiff",overwrite=TRUE)
-  filout=paste0("SM_Global_",gsub("[.]", "-", substr(names(r), 2, 8))[i],".bil")
-  writeRaster(rr[[i]], filename=filout, format="BIL",overwrite=TRUE)
+  #filout=paste0("SM_Global_",gsub("[.]", "-", substr(names(r), 2, 8))[i],".bil")
+  #writeRaster(rr[[i]], filename=filout, format="BIL",overwrite=TRUE)
+  filout=paste0("SM_Global_",gsub("[.]", "-", substr(names(r), 2, 8))[i],".tif")
+  writeRaster(rr[[i]], filename=filout, format="GTiff",overwrite=TRUE)
 }
 
 rm(list=ls())
